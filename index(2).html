@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LoanConnect | Customer Loan Portal</title>
+<style>
+:root{--bg:#f4f6fb;--card:#fff;--ink:#172033;--muted:#687386;--brand:#4f46e5;--brand2:#7c3aed;--line:#e5e9f2;--green:#16865c;--red:#c24141}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:var(--ink)}header{background:linear-gradient(120deg,#312e81,#5b21b6);color:white;padding:20px 16px}header .wrap,main{max-width:1050px;margin:auto}header h1{margin:0;font-size:24px}header p{margin:6px 0 0;color:#e5e7ff;font-size:14px}.nav{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.nav button{border:1px solid #ffffff55;background:#ffffff18;color:white;border-radius:10px;padding:10px 14px;cursor:pointer}.nav button.active{background:white;color:#3730a3}
+main{padding:20px 14px 50px}.notice{background:#fff7df;border:1px solid #f3d58a;color:#765719;padding:12px;border-radius:12px;font-size:13px;margin-bottom:16px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 5px 20px #18213a08}.metric{font-size:12px;color:var(--muted)}.value{font-size:25px;font-weight:700;margin-top:8px}.section{margin-top:18px}.section h2{font-size:19px;margin:0 0 12px}.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}label{display:block;font-size:13px;font-weight:600;margin:12px 0 6px}input,select{width:100%;padding:12px;border:1px solid #d7dce8;border-radius:10px;background:white;font-size:15px}button.primary{background:var(--brand);color:white;border:0;border-radius:10px;padding:12px 16px;font-weight:700;cursor:pointer;margin-top:14px}button.secondary{background:#eef0ff;color:#4338ca;border:0;border-radius:10px;padding:10px 14px;cursor:pointer}button.danger{background:#fff0f0;color:#a52d2d;border:0;border-radius:10px;padding:9px 12px;cursor:pointer}button:disabled{opacity:.5;cursor:not-allowed}.muted{color:var(--muted);font-size:13px}.hide{display:none!important}.balance{font-size:32px;font-weight:800;color:#4338ca}.pill{display:inline-block;padding:5px 9px;border-radius:20px;background:#eef2ff;color:#4338ca;font-size:12px}.progress{height:9px;background:#e8ebf3;border-radius:10px;overflow:hidden;margin:12px 0}.progress span{display:block;height:100%;background:linear-gradient(90deg,#4f46e5,#8b5cf6)}table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:11px 8px;border-bottom:1px solid var(--line)}th{color:var(--muted);font-weight:600}.tablewrap{overflow-x:auto}.foot{font-size:12px;color:var(--muted);margin-top:20px;line-height:1.5}.alert{padding:11px;border-radius:10px;margin-top:10px;font-size:13px}.success{background:#e8f7ef;color:#126943}.error{background:#fff0f0;color:#a52d2d}.smallbtn{font-size:12px;padding:7px 9px!important;margin:0!important}
+@media(max-width:700px){.grid{grid-template-columns:1fr 1fr}.two{grid-template-columns:1fr}.value{font-size:22px}header h1{font-size:21px}main{padding:14px 10px 35px}.card{padding:14px}.grid .card:last-child{grid-column:span 2}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<h1>LoanConnect</h1><p>Simple customer loan and daily repayment portal</p>
+<div class="nav">
+<button class="active" data-tab="customer">Customer Portal</button>
+<button data-tab="owner">Owner Dashboard</button>
+<button data-tab="rules">Loan Terms</button>
+</div></div></header>
+<main>
+<div class="notice"><strong>Prototype notice:</strong> This demo stores sample data in this browser only. It is not a secure live lending platform, does not process payments, and cannot guarantee scheduled 7:00 PM notifications. Connect a secure backend, authentication, payment verification and a scheduled notification service before real use.</div>
+
+<section id="customer">
+<div id="authArea" class="two">
+<div class="card"><h2>Create customer account</h2><p class="muted">Use your own details to register in this demo.</p>
+<label>Full name</label><input id="regName" placeholder="Full name">
+<label>Phone number</label><input id="regPhone" placeholder="07XXXXXXXX" inputmode="tel">
+<label>Email (optional)</label><input id="regEmail" type="email" placeholder="you@example.com">
+<label>Password (demo only)</label><input id="regPass" type="password" placeholder="Create password">
+<button class="primary" onclick="register()">Create account</button><div id="regMsg"></div></div>
+<div class="card"><h2>Customer login</h2><p class="muted">Already registered on this browser?</p>
+<label>Phone number</label><input id="loginPhone" inputmode="tel" placeholder="07XXXXXXXX">
+<label>Password</label><input id="loginPass" type="password" placeholder="Your password">
+<button class="primary" onclick="login()">Log in</button><div id="loginMsg"></div>
+<p class="muted">Demo accounts are saved locally and should not be used for real customer data.</p></div>
+</div>
+<div id="customerArea" class="hide">
+<div class="row" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><div><h2 id="welcome" style="margin:0 0 5px">Hello</h2><span class="muted">Your loan overview</span></div><button class="secondary" onclick="logout()">Log out</button></div>
+<div class="grid section">
+<div class="card"><div class="metric">Outstanding balance</div><div class="balance" id="cBalance">KSh 0</div></div>
+<div class="card"><div class="metric">Today's instalment</div><div class="value" id="cDaily">KSh 0</div></div>
+<div class="card"><div class="metric">Days remaining</div><div class="value" id="cDays">0</div></div>
+</div>
+<div class="two section">
+<div class="card"><h2>My loan</h2><div class="muted">Principal</div><div class="value" id="cPrincipal">—</div><p>Interest: <strong id="cInterest">—</strong></p><p>Total repayment: <strong id="cTotal">—</strong></p><p>Paid so far: <strong id="cPaid">—</strong></p><p>Repayment period: <strong id="cPeriod">—</strong></p><div class="progress"><span id="cProgress" style="width:0%"></span></div><span class="pill" id="cStatus">No active loan</span></div>
+<div class="card"><h2>Payment information</h2><p class="muted">Make payment using the payment method provided by your lender. Your payment will appear here after the owner records and verifies it.</p><label>Payment reference (optional)</label><input id="payRef" placeholder="M-Pesa transaction code"><button class="primary" onclick="sendPaymentNote()">Submit payment reference</button><div id="payMsg"></div><p class="muted">Submitting a reference does not itself confirm payment.</p></div>
+</div>
+<div class="card section"><h2>My payment history</h2><div class="tablewrap"><table><thead><tr><th>Date</th><th>Amount</th><th>Reference</th><th>Status</th></tr></thead><tbody id="cHistory"><tr><td colspan="4">No payments yet.</td></tr></tbody></table></div></div>
+</div>
+</section>
+
+<section id="owner" class="hide">
+<div class="card"><h2>Owner dashboard</h2><p class="muted">Demo owner view. For live use, protect this area with server-side admin authentication.</p>
+<div class="grid">
+<div><div class="metric">Total principal issued</div><div class="value" id="oIssued">KSh 0</div></div>
+<div><div class="metric">Payments recorded</div><div class="value" id="oPaid">KSh 0</div></div>
+<div><div class="metric">Outstanding balance</div><div class="value" id="oBalance">KSh 0</div></div>
+</div></div>
+<div class="two section">
+<div class="card"><h2>Issue / update loan</h2>
+<label>Customer</label><select id="loanCustomer"></select>
+<label>Loan amount</label><select id="loanAmount"><option value="1000">KSh 1,000</option><option value="2000">KSh 2,000</option><option value="3000">KSh 3,000</option><option value="4000">KSh 4,000</option><option value="5000">KSh 5,000</option><option value="6000">KSh 6,000</option><option value="7000">KSh 7,000</option><option value="8000">KSh 8,000</option><option value="9000">KSh 9,000</option><option value="10000">KSh 10,000</option></select>
+<label>Loan start date</label><input id="loanDate" type="date">
+<p class="muted" id="loanQuote">Choose an amount to see the repayment terms.</p>
+<button class="primary" onclick="issueLoan()">Save loan</button><div id="loanMsg"></div></div>
+<div class="card"><h2>Record verified payment</h2>
+<label>Customer</label><select id="payCustomer"></select>
+<label>Payment amount (KSh)</label><input id="payAmount" type="number" min="1" placeholder="Amount received">
+<label>M-Pesa / payment reference</label><input id="ownerRef" placeholder="Transaction code">
+<label>Payment date</label><input id="ownerPayDate" type="date">
+<button class="primary" onclick="recordPayment()">Record payment</button><div id="ownerPayMsg"></div>
+<p class="muted">Only record payments you have actually received and verified.</p></div>
+</div>
+<div class="card section"><h2>Customer list</h2><div class="tablewrap"><table><thead><tr><th>Customer</th><th>Phone</th><th>Loan</th><th>Balance</th><th>Daily due</th><th>Reminder</th></tr></thead><tbody id="ownerCustomers"></tbody></table></div></div>
+<div class="card section"><h2>7:00 PM reminder status</h2><p id="reminderStatus" class="muted">Reminder check has not run.</p><button class="secondary" onclick="checkReminders()">Check due reminders now</button><p class="muted">The demo can open WhatsApp reminder drafts when you press the reminder action. Automatic sending at 7:00 PM requires a server scheduler and an approved SMS/WhatsApp provider.</p></div>
+</section>
+
+<section id="rules" class="hide">
+<div class="card"><h2>Loan terms calculator</h2><p class="muted">The current demo schedule uses a flat 30% interest charge, with 10-day repayment for amounts up to and including KSh 3,000 and 15-day repayment for amounts above KSh 3,000.</p>
+<label>Loan amount</label><select id="calcAmount"><option value="1000">KSh 1,000</option><option value="2000">KSh 2,000</option><option value="3000">KSh 3,000</option><option value="4000">KSh 4,000</option><option value="5000">KSh 5,000</option><option value="6000">KSh 6,000</option><option value="7000">KSh 7,000</option><option value="8000">KSh 8,000</option><option value="9000">KSh 9,000</option><option value="10000">KSh 10,000</option></select>
+<div id="calcResult" class="section"></div>
+</div></section>
+<p class="foot">Before real deployment, check applicable Kenyan lending, licensing, privacy and consumer-protection requirements. Display the full cost, repayment dates, late-payment policy and complaint contact before customers accept a loan. Do not use this prototype to store real passwords, identity documents or financial records.</p>
+</main>
+<script>
+const KEY='loanconnect_demo_v1';
+let data=JSON.parse(localStorage.getItem(KEY)||'{"customers":[],"payments":[]}');
+let current=null;
+const K=n=>'KSh '+Number(n||0).toLocaleString('en-KE',{maximumFractionDigits:2});
+const today=()=>new Date().toISOString().slice(0,10);
+document.getElementById('loanDate').value=today();document.getElementById('ownerPayDate').value=today();
+function save(){localStorage.setItem(KEY,JSON.stringify(data));}
+function msg(id,text,type='success'){document.getElementById(id).innerHTML=`<div class="alert ${type}">${text}</div>`;}
+function terms(principal){let interest=principal*.30,total=principal+interest,days=principal<=3000?10:15;return{principal,interest,total,days,daily:total/days};}
+function remaining(c){return Math.max(0,(c.loan?.total||0)-data.payments.filter(p=>p.customerId===c.id&&p.status==='Verified').reduce((s,p)=>s+p.amount,0));}
+function register(){let name=regName.value.trim(),phone=regPhone.value.trim(),pass=regPass.value;
+if(!name||!phone||pass.length<6){msg('regMsg','Enter your name, phone number and a demo password of at least 6 characters.','error');return;}
+if(data.customers.some(c=>c.phone===phone)){msg('regMsg','That phone number already has a demo account.','error');return;}
+let c={id:Date.now().toString(),name,phone,email:regEmail.value.trim(),password:pass,loan:null};data.customers.push(c);save();current=c.id;refresh();msg('regMsg','Demo account created.','success');}
+function login(){let c=data.customers.find(c=>c.phone===loginPhone.value.trim()&&c.password===loginPass.value);if(!c){msg('loginMsg','Phone number or password is incorrect.','error');return;}current=c.id;refresh();}
+function logout(){current=null;refresh();}
+function issueLoan(){let c=data.customers.find(c=>c.id===loanCustomer.value);if(!c){msg('loanMsg','Register a customer first.','error');return;}let t=terms(+loanAmount.value);c.loan={...t,start:loanDate.value||today()};save();refresh();msg('loanMsg',`Loan saved: ${K(t.total)} total over ${t.days} days.`);}
+function recordPayment(){let c=data.customers.find(c=>c.id===payCustomer.value),amount=+payAmount.value;if(!c||!c.loan||amount<=0){msg('ownerPayMsg','Choose a customer with a loan and enter a valid payment.','error');return;}if(amount>remaining(c)){msg('ownerPayMsg','Payment exceeds the remaining balance.','error');return;}data.payments.push({id:Date.now().toString(),customerId:c.id,amount,ref:ownerRef.value.trim(),date:ownerPayDate.value||today(),status:'Verified'});save();refresh();payAmount.value='';ownerRef.value='';msg('ownerPayMsg','Verified payment recorded.');}
+function sendPaymentNote(){let ref=payRef.value.trim();if(!ref){msg('payMsg','Enter a payment reference first.','error');return;}msg('payMsg','Reference submitted for owner verification: '+ref+'. Your balance changes after verification.');}
+function updateQuote(){let t=terms(+loanAmount.value);loanQuote.textContent=`Interest ${K(t.interest)} · Total ${K(t.total)} · ${t.days} days · Daily instalment ${K(t.daily)}`;}
+function calculate(){let t=terms(+calcAmount.value);calcResult.innerHTML=`<div class="grid"><div><div class="metric">Interest</div><div class="value">${K(t.interest)}</div></div><div><div class="metric">Total repayment</div><div class="value">${K(t.total)}</div></div><div><div class="metric">Daily instalment</div><div class="value">${K(t.daily)}</div></div></div><p>Repayment period: <strong>${t.days} days</strong></p>`;}
+function refresh(){authArea.classList.toggle('hide',!!current);customerArea.classList.toggle('hide',!current);if(current){let c=data.customers.find(c=>c.id===current);if(!c){current=null;refresh();return;}welcome.textContent='Hello, '+c.name;let loan=c.loan,b=remaining(c);cBalance.textContent=K(b);cDaily.textContent=loan?K(Math.min(loan.daily,b)):'—';let paid=loan?loan.total-b:0;cDays.textContent=loan?Math.max(0,loan.days-Math.floor(paid/(loan.daily||1))):'—';cPrincipal.textContent=loan?K(loan.principal):'No loan';cInterest.textContent=loan?K(loan.interest):'—';cTotal.textContent=loan?K(loan.total):'—';cPaid.textContent=loan?K(paid):'—';cPeriod.textContent=loan?loan.days+' days':'—';cProgress.style.width=loan?(paid/loan.total*100)+'%':'0%';cStatus.textContent=!loan?'No active loan':b<=0?'Paid in full':'Repayment in progress';let ps=data.payments.filter(p=>p.customerId===c.id).sort((a,b)=>b.date.localeCompare(a.date));cHistory.innerHTML=ps.length?ps.map(p=>`<tr><td>${p.date}</td><td>${K(p.amount)}</td><td>${p.ref||'—'}</td><td>${p.status}</td></tr>`).join(''):'<tr><td colspan="4">No payments yet.</td></tr>';}
+let selectOptions=data.customers.map(c=>`<option value="${c.id}">${c.name} (${c.phone})</option>`).join('');loanCustomer.innerHTML=payCustomer.innerHTML=selectOptions||'<option value="">No customers yet</option>';
+let issued=data.customers.reduce((s,c)=>s+(c.loan?.principal||0),0),paid=data.payments.filter(p=>p.status==='Verified').reduce((s,p)=>s+p.amount,0),balance=data.customers.reduce((s,c)=>s+remaining(c),0);oIssued.textContent=K(issued);oPaid.textContent=K(paid);oBalance.textContent=K(balance);
+ownerCustomers.innerHTML=data.customers.length?data.customers.map(c=>{let b=remaining(c),due=c.loan?Math.min(c.loan.daily,b):0;return`<tr><td>${c.name}</td><td>${c.phone}</td><td>${c.loan?K(c.loan.principal):'—'}</td><td>${c.loan?K(b):'—'}</td><td>${c.loan?K(due):'—'}</td><td>${c.loan&&b>0?'Check 7 PM':'—'} <button class="secondary smallbtn" onclick="remind('${c.id}')">WhatsApp</button></td></tr>`}).join(''):'<tr><td colspan="6">No registered customers yet.</td></tr>';
+}
+function remind(id){let c=data.customers.find(c=>c.id===id);if(!c||!c.loan)return;let b=remaining(c),text=`Hello ${c.name}, this is a friendly reminder to check your daily loan instalment. Remaining balance: ${K(b)}. Please contact us if you have questions.`;let phone=c.phone.replace(/\D/g,'');if(phone.startsWith('0'))phone='254'+phone.slice(1);window.open('https://wa.me/'+phone+'?text='+encodeURIComponent(text),'_blank');}
+function checkReminders(){let now=new Date(),due=data.customers.filter(c=>c.loan&&remaining(c)>0&&c.loan.start<=today());reminderStatus.textContent=`Manual check at ${now.toLocaleString()}: ${due.length} customer(s) have an outstanding loan. This demo does not know whether today's instalment has been paid unless a payment was recorded. Use the WhatsApp buttons to prepare individual reminders.`;}
+document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');['customer','owner','rules'].forEach(id=>document.getElementById(id).classList.toggle('hide',id!==b.dataset.tab));refresh();}));
+loanAmount.addEventListener('change',updateQuote);calcAmount.addEventListener('change',calculate);
+refresh();updateQuote();calculate();
+</script>
+</body>
+</html>
